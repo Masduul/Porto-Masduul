@@ -1,0 +1,2115 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, viewport-fit=cover"
+    />
+    <title>Portofolio</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Inter:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --bw: #f5f3eb;
+        --lg: #a3ad8c;
+        --ag: #697653;
+        --agd: #4c573a;
+        --wb: #8b6f55;
+        --db: #493c32;
+        --r: 20px;
+        --ease: cubic-bezier(0.22, 0.8, 0.2, 1);
+        --fd: "Archivo Black", system-ui, sans-serif;
+        --fb: "Inter", system-ui, sans-serif;
+        --mx: 0;
+        --my: 0;
+        --ox: 0px;
+        --sh1:
+          0 1px 2px rgba(73, 60, 50, 0.1), 0 6px 14px rgba(73, 60, 50, 0.1),
+          0 20px 36px rgba(73, 60, 50, 0.12);
+        --sh2:
+          0 2px 4px rgba(73, 60, 50, 0.12), 0 12px 22px rgba(73, 60, 50, 0.16),
+          0 28px 48px rgba(73, 60, 50, 0.18);
+        --sh0: 0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+      html,
+      body {
+        height: 100%;
+        overflow: hidden;
+      }
+      body {
+        font-family: var(--fb);
+        color: var(--db);
+        -webkit-font-smoothing: antialiased;
+        background:
+          radial-gradient(90vmax 60vmax at 12% 8%, #fcfbf6, transparent 60%),
+          radial-gradient(80vmax 60vmax at 92% 100%, #e4e8d6, transparent 60%),
+          var(--bw);
+      }
+      button {
+        font: inherit;
+        border: 0;
+        background: none;
+        cursor: pointer;
+        color: inherit;
+      }
+      img {
+        display: block;
+        max-width: 100%;
+      }
+      ul {
+        list-style: none;
+      }
+      .deck {
+        position: fixed;
+        inset: 0;
+        touch-action: pan-y;
+        -webkit-user-select: none;
+        user-select: none;
+      }
+
+      /* ===== LINGKUNGAN BERSAMA 2D (dibuat sekali, bergeser dengan parallax) ===== */
+      .env {
+        position: absolute;
+        inset: 0;
+        overflow: hidden;
+        pointer-events: none;
+        z-index: 0;
+      }
+      .lay {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: calc(100vw * (1 + 3 * var(--f)));
+        will-change: translate, rotate, scale;
+        /* pivot = pusat viewport dalam koordinat layer, agar rotasi/zoom kamera mengitari layar */
+        transform-origin: calc(var(--c, 0) * var(--f) * 100vw + 50vw) 50%;
+        translate: calc(
+            var(--c, 0) * var(--f) * -100vw + var(--mx) * var(--f) * -36px +
+              var(--dgx, 0) * var(--f) * 14px
+          )
+          calc(
+            var(--my) * var(--f) * -24px + var(--dgy, 0) * var(--f) * 10px +
+              var(--ky, 0) * (0.15 + var(--f)) * 1vh
+          );
+        rotate: calc(
+          (
+              var(--kr, 0) * (0.3 + var(--f) * 0.7) + var(--mx) * var(--f) * 0.5 +
+                var(--dgr, 0) * var(--f) * 0.8
+            ) * 1deg
+        );
+        scale: calc(1 + var(--kz, 0) * (0.4 + var(--f)));
+      }
+      .lay i {
+        position: absolute;
+        left: calc(var(--x) * 1vw);
+        top: calc(var(--y) * 1%);
+        font-size: calc(var(--v) * 1vmin);
+      }
+      .st {
+        width: var(--s, 3px);
+        height: var(--s, 3px);
+        font-size: 0 !important;
+        border-radius: 50%;
+        background: var(--ag);
+        opacity: 0.5;
+        animation: tw var(--t, 5s) ease-in-out infinite alternate;
+      }
+      @keyframes tw {
+        to {
+          opacity: 0.12;
+        }
+      }
+      .nb {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        background: radial-gradient(
+          closest-side,
+          rgba(163, 173, 140, 0.5),
+          transparent
+        );
+      }
+      .pl {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        opacity: 0.6;
+        background: radial-gradient(
+          circle at 32% 28%,
+          var(--c1),
+          var(--c2) 78%
+        );
+        box-shadow:
+          inset -0.1em -0.1em 0.22em rgba(73, 60, 50, 0.3),
+          0 0.08em 0.18em rgba(73, 60, 50, 0.18);
+      }
+      .pl.rg::after {
+        content: "";
+        position: absolute;
+        left: -28%;
+        right: -28%;
+        top: 40%;
+        bottom: 40%;
+        border: 0.035em solid rgba(105, 118, 83, 0.5);
+        border-radius: 50%;
+        rotate: -14deg;
+      }
+      .or {
+        width: 1em;
+        height: 0.38em;
+        border: 1px solid rgba(105, 118, 83, 0.3);
+        border-radius: 50%;
+        rotate: -16deg;
+      }
+      .pt {
+        width: var(--s);
+        height: var(--s);
+        font-size: 0 !important;
+        border-radius: 50%;
+        background: var(--lg);
+        opacity: 0.6;
+        animation: fl var(--t, 8s) ease-in-out infinite alternate;
+      }
+      @keyframes fl {
+        to {
+          translate: var(--dx, 16px) -30px;
+        }
+      }
+      .cm {
+        width: 150px;
+        height: 3px;
+        font-size: 0 !important;
+        border-radius: 3px;
+        background: linear-gradient(90deg, transparent, var(--wb));
+        rotate: 15deg;
+        opacity: 0;
+        animation: fly var(--t, 16s) linear infinite var(--dl, 0s);
+      }
+      .cm::after {
+        content: "";
+        position: absolute;
+        right: -2px;
+        top: -2px;
+        width: 7px;
+        height: 7px;
+        border-radius: 50%;
+        background: var(--wb);
+      }
+      @keyframes fly {
+        0% {
+          translate: 0 0;
+          opacity: 0;
+        }
+        10%,
+        70% {
+          opacity: 0.8;
+        }
+        100% {
+          translate: 60vw 16vw;
+          opacity: 0;
+        }
+      }
+      .dk {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        background: var(--lg);
+        opacity: 0.3;
+        box-shadow: 0 0.2em 0.4em rgba(73, 60, 50, 0.2);
+      }
+      .og {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        border: 2px solid rgba(105, 118, 83, 0.35);
+      }
+
+      /* ===== SLIDE ===== */
+      .slide {
+        /* setiap slide = bidang 2D berukuran layar, diletakkan di ruang 3D oleh scene controller */
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100vw;
+        height: 100vh;
+        height: 100dvh;
+        margin: -50vh 0 0 -50vw;
+        margin-top: -50dvh;
+        z-index: 1;
+        pointer-events: none;
+        will-change: transform, opacity, filter;
+      }
+      .slide.on {
+        pointer-events: auto;
+      }
+      .slide:not(.on) .wrap {
+        overflow: hidden;
+      }
+      .deck {
+        perspective: 1200px;
+        perspective-origin: 50% 50%;
+      }
+      .world {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 0;
+        height: 0;
+        z-index: 1;
+        transform-style: preserve-3d;
+        will-change: transform;
+      }
+      /* slide yang belum difokuskan tampil sebagai "hantu": hanya foto & kata latar, jauh di dalam ruang */
+      .deck .slide:not(.in) .pic[data-in],
+      .deck .slide:not(.in) .bgword[data-in],
+      .deck .slide:not(.in) .bgamp[data-in] {
+        opacity: 0.6;
+        translate: 0 0;
+        scale: 1;
+        filter: none;
+      }
+      .wrap {
+        position: absolute;
+        inset: 0;
+        overflow-y: auto;
+        overflow-x: hidden;
+        display: flex;
+        scrollbar-width: thin;
+        padding: calc(env(safe-area-inset-top, 0px) + 86px)
+          max(clamp(24px, 6vw, 80px), env(safe-area-inset-right, 0px))
+          calc(env(safe-area-inset-bottom, 0px) + 32px)
+          max(clamp(24px, 6vw, 80px), env(safe-area-inset-left, 0px));
+      }
+      .in2 {
+        margin: auto;
+        width: min(1120px, 100%);
+      } /* margin:auto = pusat aman, tidak memotong bagian atas saat konten tinggi */
+      .orn {
+        position: absolute;
+        border-radius: 50%;
+        pointer-events: none;
+        opacity: 0;
+        transition: opacity 0.9s;
+        translate: calc(var(--mx) * var(--k) * 1px)
+          calc(var(--my) * var(--k) * 1px);
+      }
+      .slide.in .orn {
+        opacity: 1;
+      }
+      .o1 {
+        width: clamp(44px, 8vmin, 96px);
+        aspect-ratio: 1;
+        top: 20%;
+        left: 5%;
+        --k: 60;
+        border: 2px solid rgba(105, 118, 83, 0.4);
+        box-shadow: 0 10px 22px rgba(73, 60, 50, 0.12);
+      }
+      .o2 {
+        width: clamp(26px, 5vmin, 60px);
+        aspect-ratio: 1;
+        bottom: 16%;
+        right: 6%;
+        --k: -44;
+        background: var(--lg);
+        box-shadow: 0 12px 24px rgba(73, 60, 50, 0.22);
+      }
+      .o3 {
+        width: clamp(14px, 2.4vmin, 30px);
+        aspect-ratio: 1;
+        top: 26%;
+        right: 9%;
+        --k: 80;
+        background: var(--wb);
+        opacity: 0.5;
+        box-shadow: 0 6px 12px rgba(73, 60, 50, 0.25);
+      }
+
+      /* ===== REVEAL / CONCEAL 2D (masuk dan keluar saling berkebalikan) ===== */
+      [data-in] {
+        position: relative;
+        z-index: 2;
+        --dl: calc(var(--d, 0) * 0.09s);
+        --cl: calc((7 - var(--d, 0)) * 0.05s);
+        opacity: 0;
+        scale: 0.96;
+        filter: blur(6px);
+        translate: calc(var(--dx, 0px) + var(--ox)) var(--dy, 22px);
+        transition:
+          opacity 0.45s ease-in var(--cl),
+          translate 0.55s ease-in var(--cl),
+          scale 0.55s ease-in var(--cl),
+          filter 0.45s ease-in var(--cl),
+          box-shadow 0.45s var(--cl),
+          text-shadow 0.45s var(--cl);
+      }
+      .slide.in [data-in] {
+        opacity: 1;
+        scale: 1;
+        filter: blur(0);
+        translate: 0 0;
+        transition:
+          opacity 0.8s ease-out var(--dl),
+          translate 0.9s var(--ease) var(--dl),
+          scale 0.9s var(--ease) var(--dl),
+          filter 0.7s ease-out var(--dl),
+          box-shadow 0.8s var(--dl),
+          text-shadow 0.8s var(--dl);
+      }
+
+      /* ===== TIPOGRAFI & KARTU ===== */
+      .sec {
+        font-family: var(--fd);
+        font-size: clamp(2rem, 4.6vw, 3.6rem);
+        line-height: 1.02;
+        color: var(--ag);
+        overflow-wrap: anywhere;
+      }
+      .tag {
+        color: var(--wb);
+        font-size: clamp(0.95rem, 1.6vw, 1.15rem);
+        line-height: 1.5;
+      }
+      .hint {
+        font-size: 0.78rem;
+        color: var(--wb);
+        opacity: 0.8;
+      }
+      .cut {
+        position: relative;
+        z-index: 1;
+        width: auto;
+        height: auto;
+        max-width: 100%;
+        max-height: min(66dvh, 680px);
+        object-fit: contain;
+        /* --bx/--by/--bs/--br = offset spring (overshoot & settle), diisi JS hanya ~1,5 detik setelah kamera tiba */
+        translate: calc(var(--mx) * -10px + var(--bx, 0px))
+          calc(var(--my) * -6px + var(--by, 0px));
+        scale: var(--bs, 1);
+        rotate: var(--br, 0deg);
+        filter: drop-shadow(0 4px 6px rgba(73, 60, 50, 0.18))
+          drop-shadow(0 22px 26px rgba(73, 60, 50, 0.28));
+      }
+      .pic {
+        position: relative;
+        display: grid;
+        place-items: end center;
+        min-width: 0;
+      }
+      .pic::before {
+        content: "";
+        position: absolute;
+        inset: 4% 0 0;
+        background: radial-gradient(
+          closest-side,
+          rgba(163, 173, 140, 0.42),
+          transparent
+        );
+      }
+      .pic::after {
+        content: "";
+        position: absolute;
+        left: 8%;
+        right: 8%;
+        bottom: -6px;
+        height: 22px;
+        background: radial-gradient(
+          closest-side,
+          rgba(73, 60, 50, 0.28),
+          transparent
+        );
+        filter: blur(4px);
+      }
+      .btn {
+        position: relative;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-family: var(--fd);
+        text-decoration: none;
+        color: #fff;
+        background: var(--ag);
+        padding: 0.9em 1.7em;
+        border-radius: 99px;
+        box-shadow:
+          0 2px 0 var(--agd),
+          0 10px 20px rgba(73, 60, 50, 0.28);
+        transition:
+          transform 0.25s var(--ease),
+          box-shadow 0.25s,
+          background 0.3s;
+      }
+      .btn::before {
+        content: "";
+        position: absolute;
+        inset: -6px;
+        border-radius: 99px;
+      }
+      .btn:hover {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) scale(1.05);
+        background: var(--agd);
+        box-shadow:
+          0 2px 0 var(--agd),
+          0 14px 26px rgba(73, 60, 50, 0.34);
+      }
+      .btn:active {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) scale(0.96);
+      }
+      .btn.sm {
+        padding: 0.6em 1.2em;
+        font-size: 0.85rem;
+      }
+
+      /* S1 */
+      .in2.s1 {
+        display: grid;
+        justify-items: center;
+        text-align: center;
+        gap: 14px;
+      }
+      .sub {
+        font-size: 0.85rem;
+        letter-spacing: 0.28em;
+        text-transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) uppercase;
+        color: var(--wb);
+        font-weight: 700;
+      }
+      .hero {
+        display: grid;
+        gap: 0.06em;
+        line-height: 0.92;
+        font-family: var(--fd);
+        text-transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) uppercase;
+        max-width: 100%;
+      }
+      .wa {
+        font-size: clamp(1.5rem, 5.4vw, 4rem);
+        color: var(--ag);
+      }
+      .wb {
+        font-size: min(15vw, 24dvh, 10rem);
+        color: var(--db);
+        overflow-wrap: anywhere;
+      }
+      .full {
+        font-family: var(--fd);
+        font-size: clamp(1rem, 2.2vw, 1.5rem);
+        color: var(--agd);
+      }
+      /* ===== TIPOGRAFI EDITORIAL: bentuk 2D, kedalaman dari perspektif, skala, layer ===== */
+      :root {
+        --wbd: #6b523c;
+        --ts:
+          0 0 14px rgba(245, 243, 235, 0.92), 0 1px 0 rgba(255, 255, 255, 0.95),
+          0 4px 8px rgba(73, 60, 50, 0.16), 0 16px 28px rgba(73, 60, 50, 0.16);
+        --th:
+          0 0 0 transparent, 0 0 0 transparent, 0 0 0 transparent,
+          0 0 0 transparent;
+      }
+      .t2,
+      .t1 {
+        text-shadow: var(--ts);
+      }
+      .t2[data-in],
+      .t1[data-in] {
+        text-shadow: var(--th);
+      }
+      .slide.in .t2[data-in],
+      .slide.in .t1[data-in] {
+        text-shadow: var(--ts);
+      }
+      .pic[data-in] {
+        z-index: 3;
+      }
+      .in2 {
+        perspective: 1400px;
+      }
+      .hero {
+        perspective: 1000px;
+      }
+      .in2.s1 .wa {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-16deg) rotate(-2deg);
+      }
+      .in2.s1 .wb {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotate(-2deg);
+      }
+      .in2.s2,
+      .in2.s4 {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        column-gap: clamp(8px, 1.4vw, 20px);
+        row-gap: clamp(10px, 2vh, 22px);
+        align-items: center;
+      }
+      .in2.s2 > *,
+      .in2.s4 > * {
+        grid-column: var(--gc, 1/-1);
+        grid-row: var(--gr, auto);
+        min-width: 0;
+      }
+      .fact small {
+        display: block;
+        font-size: 0.78rem;
+        letter-spacing: 0.14em;
+        text-transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) uppercase;
+        color: var(--wbd);
+        font-weight: 700;
+        margin-bottom: 0.3em;
+      }
+      .fact b {
+        display: block;
+        font-weight: 500;
+        font-size: clamp(1rem, 1.7vw, 1.35rem);
+        line-height: 1.35;
+        color: var(--db);
+        overflow-wrap: anywhere;
+      }
+      .words li {
+        display: inline-block;
+        margin: 0 0.55em 0.1em 0;
+        font-family: var(--fd);
+        color: var(--ag);
+        font-size: clamp(1.05rem, 2.2vw, 1.8rem);
+        line-height: 1.15;
+        text-shadow: var(--ts);
+      }
+      .words li:nth-child(2n) {
+        color: var(--wb);
+        font-size: clamp(0.95rem, 1.7vw, 1.35rem);
+      }
+      .words.alt li {
+        color: var(--db);
+      }
+      .words.alt li:nth-child(2n) {
+        color: var(--ag);
+      }
+      .bgword,
+      .bgamp {
+        z-index: 1;
+        pointer-events: none;
+        place-self: center;
+        font-family: var(--fd);
+        text-transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) uppercase;
+        color: rgba(163, 173, 140, 0.14);
+        -webkit-text-stroke: 2px rgba(105, 118, 83, 0.26);
+        text-align: center;
+        overflow-wrap: anywhere;
+        line-height: 0.85;
+      }
+      .bgword {
+        font-size: min(15vw, 26dvh, 12.5rem);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) translate(calc(var(--mx) * -26px), calc(var(--my) * -14px));
+      }
+      .bgamp {
+        font-size: min(34vw, 50dvh, 24rem);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) translate(calc(var(--mx) * -26px), calc(var(--my) * -14px));
+      }
+      /* S2 Identity */
+      .in2.s2 > .sec {
+        align-self: end;
+        font-size: clamp(2.4rem, 6.2vw, 5.4rem);
+        line-height: 0.95;
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(14deg) rotate(-3deg);
+        transform-origin: left center;
+      }
+      .nm2 {
+        font-family: var(--fd);
+        font-size: clamp(1.3rem, 2.8vw, 2.4rem);
+        line-height: 1.1;
+        color: var(--db);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(10deg);
+        transform-origin: left center;
+      }
+      .in2.s2 > .right {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-12deg);
+        transform-origin: right center;
+      }
+      /* S4 Closing */
+      .s4t {
+        display: contents;
+      }
+      .in2.s4 .ta,
+      .in2.s4 .tb {
+        grid-column: var(--gc);
+        grid-row: var(--gr);
+        min-width: 0;
+      }
+      .in2.s4 .ta {
+        align-self: end;
+        font-family: var(--fd);
+        font-size: clamp(2.6rem, 8vw, 7rem);
+        line-height: 0.9;
+        color: var(--ag);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(12deg) rotate(-2deg);
+        transform-origin: left center;
+        overflow-wrap: anywhere;
+      }
+      .in2.s4 .tb {
+        font-family: var(--fd);
+        font-size: clamp(1.7rem, 5vw, 4.4rem);
+        line-height: 1;
+        color: var(--db);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(12deg) rotate(-2deg) translateX(0.5em);
+        transform-origin: left center;
+        overflow-wrap: anywhere;
+      }
+      .s4d {
+        max-width: 52ch;
+        line-height: 1.7;
+        font-size: clamp(0.95rem, 1.4vw, 1.1rem);
+        color: var(--db);
+        text-shadow:
+          0 0 10px rgba(245, 243, 235, 0.95),
+          0 1px 0 #fff;
+      }
+      .hg h3 {
+        font-family: var(--fd);
+        font-weight: 400;
+        font-size: 1.1rem;
+        color: var(--ag);
+        margin-bottom: 8px;
+        padding-bottom: 6px;
+        border-bottom: 2px solid var(--lg);
+        display: inline-block;
+      }
+      .hg li {
+        position: relative;
+        padding-left: 18px;
+        margin-bottom: 8px;
+        line-height: 1.4;
+        font-weight: 500;
+        overflow-wrap: anywhere;
+        text-shadow:
+          0 0 10px rgba(245, 243, 235, 0.95),
+          0 1px 0 #fff;
+      }
+      .hg li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 0.5em;
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+        background: var(--ag);
+      }
+      .quote {
+        text-align: center;
+        font-family: var(--fd);
+        font-size: clamp(1.1rem, 2.4vw, 2rem);
+        line-height: 1.3;
+        color: var(--wb);
+        padding-top: clamp(4px, 1.5vh, 14px);
+      }
+      /* Reveal/Conceal dari BALIK FOTO (titik asal = pusat foto, dihitung JS) */
+      .aimed [data-in]:not(.pic) {
+        translate: var(--fx, 0px) var(--fy, 0px);
+        scale: 0.3;
+        filter: blur(10px);
+        transition:
+          opacity 0.35s ease-in calc(var(--cl) + 0.28s),
+          translate 0.6s cubic-bezier(0.6, 0, 0.9, 0.4) var(--cl),
+          scale 0.6s cubic-bezier(0.6, 0, 0.9, 0.4) var(--cl),
+          filter 0.5s ease-in var(--cl),
+          text-shadow 0.5s var(--cl);
+      }
+      .slide.in.aimed [data-in]:not(.pic) {
+        translate: 0 0;
+        scale: 1;
+        filter: blur(0);
+        transition:
+          opacity 0.4s ease-out var(--dl),
+          translate 0.9s var(--ease) var(--dl),
+          scale 0.9s var(--ease) var(--dl),
+          filter 0.7s ease-out var(--dl),
+          text-shadow 0.8s var(--dl);
+      }
+
+      /* ===== S3 : SOCIAL MEDIA — foto kiri, tiga blok tipografi kanan (tanpa kartu / preview) ===== */
+      .in2.s3 {
+        display: grid;
+        grid-template-columns: repeat(12, minmax(0, 1fr));
+        column-gap: clamp(8px, 1.4vw, 20px);
+        row-gap: clamp(8px, 1.8dvh, 18px);
+        align-items: center;
+        text-align: left;
+      }
+      .in2.s3 > * {
+        grid-column: var(--gc, 1/-1);
+        grid-row: var(--gr, auto);
+        min-width: 0;
+      }
+      /* foto: elemen utama, proporsi asli (contain), sisi kanan sedikit masuk ke ruang */
+      .in2.s3 > .pic {
+        transform: rotateY(7deg);
+        transform-origin: 70% 100%;
+      }
+      .in2.s3 .cut {
+        width: 100%;
+        height: min(62dvh, 640px);
+        max-width: 100%;
+        max-height: none;
+        object-fit: contain;
+        object-position: 50% 100%;
+      }
+      /* judul: bagian kiri masuk ke belakang, kanan mendekat ke kamera */
+      .in2.s3 > .sec {
+        align-self: end;
+        font-size: clamp(1.7rem, min(4.2vw, 6.8dvh), 3.4rem);
+        line-height: 0.95;
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-9deg) rotate(-1.5deg);
+        transform-origin: left center;
+      }
+      .in2.s3 .sb {
+        --ts:
+          0 0 10px rgba(245, 243, 235, 0.92), 0 1px 0 rgba(255, 255, 255, 0.9),
+          0 3px 6px rgba(73, 60, 50, 0.1), 0 8px 14px rgba(73, 60, 50, 0.08);
+        display: grid;
+        justify-items: start;
+        align-content: start;
+        gap: clamp(3px, 0.7dvh, 8px);
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-8deg) rotate(-1deg) translateX(var(--sx, 0px));
+        transform-origin: left center;
+      }
+      .sb .pn {
+        font-family: var(--fd);
+        font-weight: 400;
+        font-size: clamp(1.55rem, min(3.7vw, 6.2dvh), 3.1rem);
+        line-height: 0.95;
+        letter-spacing: -0.01em;
+        text-shadow: none;
+      }
+      .sb.tt .pn {
+        font-size: clamp(1.45rem, min(3.45vw, 5.8dvh), 2.9rem);
+      }
+      .sb.gh .pn {
+        font-size: clamp(1.35rem, min(3.2vw, 5.4dvh), 2.7rem);
+      }
+      .sb .pn span {
+        display: inline-block;
+      }
+      .sb.ig .pn span {
+        background: linear-gradient(90deg, #fa7e1e, #d62976 45%, #962fbf 75%, #4f5bd5);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: transparent;
+        filter: drop-shadow(0 6px 8px rgba(98, 40, 215, 0.14));
+      }
+      .sb.tt .pn span {
+        color: #0a0a0a;
+        text-shadow:
+          1px 1px 0 rgba(37, 244, 238, 0.55), -1px -1px 0 rgba(254, 44, 85, 0.5);
+      }
+      .sb.gh .pn span {
+        color: #24292f;
+      }
+      .sb .pu {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        column-gap: 0.85em;
+        font-size: clamp(0.95rem, 1.5vw, 1.15rem);
+        line-height: 1.3;
+        overflow-wrap: anywhere;
+      }
+      .sb .pu b {
+        font-weight: 700;
+        color: var(--db);
+      }
+      .sb .dn {
+        font-family: var(--fd);
+        font-size: 0.82em;
+        color: var(--wb);
+      }
+      .sb .pb {
+        max-width: 46ch;
+        font-size: clamp(0.82rem, 1.25vw, 0.98rem);
+        line-height: 1.45;
+        color: var(--db);
+        opacity: 0.9;
+        overflow-wrap: anywhere;
+      }
+      .sb .btn {
+        margin-top: clamp(2px, 0.8dvh, 8px);
+        min-height: 38px;
+        font-size: 0.85rem;
+        letter-spacing: 0.04em;
+        padding: 0.62em 1.5em;
+      }
+      .sb .btn:focus-visible {
+        outline: 3px solid var(--agd);
+        outline-offset: 3px;
+      }
+      .sb.ig .btn {
+        background: #c2185b;
+        box-shadow: 0 2px 0 #8e1244, 0 10px 20px rgba(194, 24, 91, 0.28);
+      }
+      .sb.ig .btn:hover {
+        background: #a3124c;
+        box-shadow: 0 2px 0 #8e1244, 0 14px 26px rgba(194, 24, 91, 0.36);
+      }
+      .sb.tt .btn {
+        background: #0a0a0a;
+        box-shadow:
+          0 2px 0 #000, -1.5px 0 0 rgba(37, 244, 238, 0.8),
+          1.5px 0 0 rgba(254, 44, 85, 0.8), 0 10px 20px rgba(0, 0, 0, 0.25);
+      }
+      .sb.tt .btn:hover {
+        background: #1b1b1b;
+        box-shadow:
+          0 2px 0 #000, -1.5px 0 0 rgba(37, 244, 238, 0.8),
+          1.5px 0 0 rgba(254, 44, 85, 0.8), 0 14px 26px rgba(0, 0, 0, 0.32);
+      }
+      .sb.gh .btn {
+        background: #238636;
+        box-shadow: 0 2px 0 #14561f, 0 10px 20px rgba(35, 134, 54, 0.28);
+      }
+      .sb.gh .btn:hover {
+        background: #1a6b2a;
+        box-shadow: 0 2px 0 #14561f, 0 14px 26px rgba(35, 134, 54, 0.36);
+      }
+      /* blok tidak bisa diklik saat sedang tersedot kembali ke balik foto */
+      #s3:not(.in) .sb {
+        pointer-events: none;
+      }
+      /* Reveal/Conceal s3: urutan eksplisit.
+         Reveal  : foto -> judul -> Instagram -> TikTok -> GitHub (jeda 0.15s, keluar dari balik foto)
+         Conceal : GitHub -> TikTok -> Instagram (--cl inline), kembali ke titik asal yang sama di balik foto */
+      #s3 [data-in] {
+        --dl: calc(var(--d, 0) * 0.15s);
+      }
+      #s3 [data-in]:not(.pic) {
+        rotate: y 26deg;
+        transition:
+          opacity 0.35s ease-in calc(var(--cl) + 0.28s),
+          translate 0.6s cubic-bezier(0.6, 0, 0.9, 0.4) var(--cl),
+          scale 0.6s cubic-bezier(0.6, 0, 0.9, 0.4) var(--cl),
+          rotate 0.6s cubic-bezier(0.6, 0, 0.9, 0.4) var(--cl),
+          filter 0.5s ease-in var(--cl),
+          text-shadow 0.5s var(--cl);
+      }
+      /* settle teks: overshoot sangat kecil (lebih halus daripada foto) */
+      #s3.in.aimed [data-in]:not(.pic) {
+        translate: 0 0;
+        scale: 1;
+        rotate: y 0deg;
+        filter: blur(0);
+        transition:
+          opacity 0.5s ease-out var(--dl),
+          translate 1s cubic-bezier(0.2, 0.85, 0.25, 1.08) var(--dl),
+          scale 1s cubic-bezier(0.2, 0.85, 0.25, 1.08) var(--dl),
+          rotate 0.9s var(--ease) var(--dl),
+          filter 0.75s ease-out var(--dl),
+          text-shadow 0.8s var(--dl);
+      }
+
+      /* ===== NAVIGASI OVAL ===== */
+      .oval {
+        position: fixed;
+        top: max(12px, env(safe-area-inset-top));
+        left: 50%;
+        translate: -50% 0;
+        z-index: 60;
+        display: flex;
+        align-items: center;
+        gap: 2px;
+        padding: 6px;
+        border-radius: 99px;
+        max-width: calc(100vw - 16px);
+        background: rgba(245, 243, 235, 0.6);
+        -webkit-backdrop-filter: blur(14px) saturate(1.3);
+        backdrop-filter: blur(14px) saturate(1.3);
+        border: 1px solid rgba(105, 118, 83, 0.35);
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.7),
+          0 2px 0 rgba(105, 118, 83, 0.2),
+          0 12px 26px rgba(73, 60, 50, 0.18);
+      }
+      .oval button {
+        position: relative;
+        z-index: 1;
+        font-family: var(--fd);
+        font-size: 0.78rem;
+        letter-spacing: 0.03em;
+        color: var(--agd);
+        padding: 0.75em 1.1em;
+        border-radius: 99px;
+        white-space: nowrap;
+        transition: color 0.35s;
+      }
+      .oval button.on {
+        color: #fff;
+      }
+      .oval .ar {
+        width: 34px;
+        height: 34px;
+        padding: 0;
+        font-size: 1rem;
+      }
+      .oval .ar:active {
+        opacity: 0.6;
+      }
+      .oval .ind {
+        position: absolute;
+        z-index: 0;
+        top: 6px;
+        bottom: 6px;
+        left: 0;
+        width: 0;
+        border-radius: 99px;
+        background: linear-gradient(var(--ag), var(--agd));
+        box-shadow:
+          inset 0 1px 0 rgba(255, 255, 255, 0.3),
+          0 6px 12px rgba(73, 60, 50, 0.25);
+        transition:
+          translate 0.7s var(--ease),
+          width 0.7s var(--ease);
+      }
+
+      /* ===== RESPONSIF ===== */
+      @media (max-width: 860px) {
+        .in2.s2,
+        .in2.s4 {
+          grid-template-columns: minmax(0, 1fr);
+          row-gap: 14px;
+        }
+        .in2.s2 > *,
+        .in2.s4 > *,
+        .in2.s4 .ta,
+        .in2.s4 .tb {
+          grid-column: 1/-1 !important;
+          grid-row: auto !important;
+        }
+        .in2.s2 > .bgword,
+        .in2.s2 > .pic,
+        .in2.s4 > .bgamp,
+        .in2.s4 > .pic {
+          grid-row: 1 !important;
+        }
+        .in2.s2 > *,
+        .in2.s4 > *,
+        .in2.s4 .ta,
+        .in2.s4 .tb {
+          transform: none !important;
+        }
+        .in2.s2 > .right,
+        .in2.s4 .tb {
+          transform: none;
+        }
+        .cut {
+          max-height: 38dvh;
+        }
+        /* tablet: tetap dua kolom, perspektif lebih tipis */
+        .in2.s3 > .pic {
+          transform: rotateY(4deg);
+        }
+        .in2.s3 .cut {
+          height: min(54dvh, 520px);
+        }
+        .in2.s3 > .sec {
+          transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-5deg);
+        }
+        .in2.s3 .sb {
+          transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1)) rotateY(-5deg) translateX(var(--sx, 0px));
+        }
+      }
+      @media (max-width: 600px) {
+        :root {
+          --ox: 0px;
+          --sh1:
+            0 1px 2px rgba(73, 60, 50, 0.1), 0 4px 10px rgba(73, 60, 50, 0.1),
+            0 12px 20px rgba(73, 60, 50, 0.1);
+        }
+        [data-in] {
+          --dx: 0px !important;
+        }
+        .in2.s2 > .right {
+          transform: none;
+        }
+        .oval .ar {
+          display: none;
+        }
+        .oval button {
+          font-size: 0.66rem;
+          padding: 0.8em 0.75em;
+        }
+        .orn {
+          display: none;
+        }
+      }
+      /* mobile: susunan vertikal, foto utuh di atas, urutan tetap Instagram -> TikTok -> GitHub, tanpa perspektif */
+      @media (max-width: 700px) {
+        .in2.s3 {
+          grid-template-columns: minmax(0, 1fr);
+          row-gap: 12px;
+        }
+        .in2.s3 > * {
+          grid-column: 1/-1 !important;
+          grid-row: auto !important;
+          transform: none !important;
+        }
+        .in2.s3 > .pic {
+          grid-row: 1 !important;
+        }
+        .in2.s3 .cut {
+          height: min(30dvh, 300px);
+        }
+        .in2.s3 > .sec {
+          font-size: clamp(1.6rem, 8vw, 2.2rem);
+        }
+        .sb .pn,
+        .sb.tt .pn,
+        .sb.gh .pn {
+          font-size: clamp(1.5rem, 7.6vw, 2.1rem);
+        }
+        .sb .pu {
+          font-size: 0.98rem;
+        }
+        .sb .pb {
+          font-size: 0.86rem;
+        }
+        .in2.s3 .sb {
+          --sx: 0px !important;
+        }
+      }
+      /* layar landscape pendek: padatkan tipografi agar ketiga blok tetap terlihat */
+      @media (max-height: 520px) and (min-width: 701px) {
+        .in2.s3 .cut {
+          height: 68dvh;
+        }
+        .in2.s3 > .sec {
+          font-size: 1.5rem;
+        }
+        .sb .pn,
+        .sb.tt .pn,
+        .sb.gh .pn {
+          font-size: 1.35rem;
+        }
+        .sb .pb {
+          font-size: 0.78rem;
+          line-height: 1.35;
+        }
+        .sb .btn {
+          min-height: 32px;
+          font-size: 0.75rem;
+          padding: 0.45em 1.2em;
+        }
+      }
+      @media (max-height: 480px) and (orientation: landscape) {
+        .cut {
+          max-height: 72dvh;
+        }
+        .wrap {
+          padding-top: calc(env(safe-area-inset-top, 0px) + 70px);
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .lay i,
+        .orn {
+          animation: none !important;
+        }
+        .cm {
+          display: none;
+        }
+        *,
+        *::before,
+        *::after {
+          transition-duration: 0.01ms !important;
+          transition-delay: 0s !important;
+        }
+      }
+    
+      /* ===== CONTINUOUS ANIMATION (variabel --mv*: terpisah dari translate/scale milik reveal & parallax) ===== */
+      @property --mvx { syntax: "<length>"; inherits: false; initial-value: 0px; }
+      @property --mvy { syntax: "<length>"; inherits: false; initial-value: 0px; }
+      @property --mvr { syntax: "<angle>"; inherits: false; initial-value: 0deg; }
+      @property --mvs { syntax: "<number>"; inherits: false; initial-value: 1; }
+      .fx {
+        transform: translate(var(--mvx, 0px), var(--mvy, 0px)) rotate(var(--mvr, 0deg)) scale(var(--mvs, 1));
+        animation:
+          mva var(--dua, 9s) ease-in-out var(--dly, 0s) infinite alternate,
+          mvb var(--dub, 12s) ease-in-out var(--dly, 0s) infinite alternate;
+      }
+      @keyframes mva {
+        from { --mvx: calc(var(--amx, 3px) * -1); --mvr: calc(var(--amr, 0.3deg) * -1); }
+        to { --mvx: var(--amx, 3px); --mvr: var(--amr, 0.3deg); }
+      }
+      @keyframes mvb {
+        from { --mvy: calc(var(--amy, 5px) * -1); --mvs: calc(1 - var(--ams, 0.004)); }
+        to { --mvy: var(--amy, 5px); --mvs: calc(1 + var(--ams, 0.004)); }
+      }
+      /* jeda saat transisi slide, saat hover, dan saat slide tidak aktif */
+      .deck[data-t]:not([data-t="idle"]) .fx,
+      .slide:not(.on) .fx,
+      .fx:hover {
+        animation-play-state: paused;
+      }
+      /* ===== 2.5D CINEMATIC CAMERA ===== */
+      @property --dgx { syntax: "<number>"; inherits: true; initial-value: 0; }
+      @property --dgy { syntax: "<number>"; inherits: true; initial-value: 0; }
+      @property --dgr { syntax: "<number>"; inherits: true; initial-value: 0; }
+      .env {
+        animation:
+          dga 19s ease-in-out infinite alternate,
+          dgb 27s ease-in-out infinite alternate;
+      }
+      @keyframes dga { from { --dgx: -1; --dgr: -0.6; } to { --dgx: 1; --dgr: 0.6; } }
+      @keyframes dgb { from { --dgy: -1; } to { --dgy: 1; } }
+      /* lapisan paling jauh (gradien lembut) ikut bergerak: tidak ada celah saat kamera miring */
+      .env::before {
+        content: "";
+        position: absolute;
+        inset: -16%;
+        background:
+          radial-gradient(50vmax 40vmax at 78% 28%, rgba(163, 173, 140, 0.22), transparent 65%),
+          radial-gradient(45vmax 35vmax at 18% 78%, rgba(196, 170, 140, 0.18), transparent 65%);
+        translate:
+          calc(var(--c, 0) * -4vw + var(--mx) * -10px + var(--dgx, 0) * 6px)
+          calc(var(--ky, 0) * 0.12vh + var(--dgy, 0) * 5px);
+        rotate: calc((var(--kr, 0) * 0.25 + var(--dgr, 0) * 0.3) * 1deg);
+        scale: calc(1 + var(--kz, 0) * 0.3);
+      }
+      /* depth of field: layer jauh paling lembut, foreground paling tajam */
+      .env.dof .lay {
+        filter: blur(calc(var(--kb, 0) * (1.1 - var(--f)) * 1px));
+      }
+      /* sudut pandang mengikuti kursor */
+      .in2 {
+        perspective-origin: calc(50% + var(--mx) * 6%) calc(50% + var(--my) * 6%);
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .env { animation: none !important; }
+      }
+
+      @media (prefers-reduced-motion: reduce) {
+        .fx { animation: none !important; transform: none; }
+      }
+</style>
+  </head>
+  <body>
+    <nav class="oval" id="oval" aria-label="Navigasi scene">
+      <span class="ind" id="ind"></span>
+      <button class="ar" id="prev" aria-label="Sebelumnya">&#8592;</button>
+      <button data-go="0">Opening</button><button data-go="1">About Me</button
+      ><button data-go="2">Social Media</button
+      ><button data-go="3">Closing</button>
+      <button class="ar" id="next" aria-label="Berikutnya">&#8594;</button>
+    </nav>
+
+    <main class="deck" id="deck">
+      <div class="env" id="env" aria-hidden="true"></div>
+
+      <section class="slide" id="s1">
+        <i class="orn o1"></i><i class="orn o2"></i><i class="orn o3"></i>
+        <div class="wrap">
+          <div class="in2 s1">
+            <p class="sub" data-in style="--d: 0" data-bind="eyebrow"></p>
+            <h1 class="hero">
+              <span
+                class="wa t2"
+                data-in
+                style="--d: 1; --dx: -34px"
+                data-bind="_a"
+              ></span>
+              <span
+                class="wb t2"
+                data-in
+                style="--d: 2; --dx: 34px"
+                data-bind="_b"
+              ></span>
+            </h1>
+            <p class="full t2" data-in style="--d: 3" data-bind="fullName"></p>
+            <p class="tag" data-in style="--d: 4" data-bind="tagline"></p>
+            <p class="hint" data-in style="--d: 5">
+              &#8592; &#8594; &nbsp;/&nbsp; geser layar &nbsp;/&nbsp; menu di
+              atas
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide aimed" id="s2">
+        <i class="orn o1"></i><i class="orn o2"></i>
+        <div class="wrap">
+          <div class="in2 s2">
+            <!-- FOTO PROFIL (PNG transparan, tanpa bingkai): ganti di CONFIG -> photos.profile -->
+            <div
+              class="pic"
+              data-in
+              style="--d: 0; --dy: 50px; --gc: 5/9; --gr: 1/5"
+            >
+              <img
+                class="cut"
+                src="assets/profile.png"
+                data-img="photos.profile"
+                alt="Foto profil"
+              />
+            </div>
+            <span
+              class="bgword"
+              data-in
+              style="--d: 1; --gc: 2/12; --gr: 1/5"
+              data-bind="nickname"
+              aria-hidden="true"
+            ></span>
+            <h2 class="sec t2" data-in style="--d: 2; --gc: 1/6; --gr: 1">
+              Tentang<br />Saya
+            </h2>
+            <p
+              class="nm2 t1"
+              data-in
+              style="--d: 3; --gc: 1/6; --gr: 2"
+              data-bind="fullName"
+            ></p>
+            <div class="fact t1" data-in style="--d: 4; --gc: 1/5; --gr: 3">
+              <small>Tempat, tanggal lahir</small><b data-bind="birth"></b>
+            </div>
+            <div class="fact t1" data-in style="--d: 5; --gc: 1/5; --gr: 4">
+              <small>Pendidikan</small><b data-bind="education"></b>
+            </div>
+            <div class="fact right" data-in style="--d: 4; --gc: 9/13; --gr: 2">
+              <small>Minat</small>
+              <ul class="words" id="interests"></ul>
+            </div>
+            <div
+              class="fact right"
+              data-in
+              style="--d: 5; --gc: 9/13; --gr: 3/5"
+            >
+              <small>Bakat</small>
+              <ul class="words alt" id="talents"></ul>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide aimed" id="s3">
+        <i class="orn o1"></i><i class="orn o3"></i>
+        <div class="wrap">
+          <div class="in2 s3" id="s3stage">
+            <!-- FOTO SOCIAL MEDIA (PNG transparan, tanpa bingkai): ganti di CONFIG -> photos.social -->
+            <div
+              class="pic"
+              data-in
+              style="--d: 0; --cl: 0.45s; --gc: 1/6; --gr: 1/5"
+            >
+              <img
+                class="cut"
+                src="assets/social.png"
+                data-img="photos.social"
+                data-alt="photos.closing"
+                alt="Foto media sosial"
+              />
+            </div>
+            <h2
+              class="sec t2"
+              data-in
+              style="--d: 1; --cl: 0.2s; --gc: 6/13; --gr: 1"
+            >
+              Media Sosial
+            </h2>
+            <!-- isi tiga blok dibuat dari PERSONAL_DATA.social (buildSocial) -->
+            <article
+              class="sb t1 ig"
+              id="soc-instagram"
+              data-in
+              style="--d: 2; --cl: 0.2s; --sx: 0px; --gc: 6/13; --gr: 2"
+            ></article>
+            <article
+              class="sb t1 tt"
+              id="soc-tiktok"
+              data-in
+              style="--d: 3; --cl: 0.1s; --sx: clamp(10px, 2.4vw, 38px); --gc: 6/13; --gr: 3"
+            ></article>
+            <article
+              class="sb t1 gh"
+              id="soc-github"
+              data-in
+              style="--d: 4; --cl: 0s; --sx: clamp(4px, 0.9vw, 14px); --gc: 6/13; --gr: 4"
+            ></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide aimed" id="s4">
+        <i class="orn o1"></i><i class="orn o2"></i>
+        <div class="wrap">
+          <div class="in2 s4">
+            <!-- FOTO PENUTUP (PNG transparan, tanpa bingkai): ganti di CONFIG -> photos.closing -->
+            <div
+              class="pic"
+              data-in
+              style="--d: 0; --dx: 60px; --gc: 8/13; --gr: 1/5"
+            >
+              <img
+                class="cut"
+                src="assets/closing.png"
+                data-img="photos.closing"
+                alt="Foto penutup"
+              />
+            </div>
+            <span
+              class="bgamp"
+              data-in
+              style="--d: 1; --gc: 6/13; --gr: 1/5"
+              aria-hidden="true"
+              >&amp;</span
+            >
+            <h2 class="s4t">
+              <span
+                class="ta t2"
+                data-in
+                style="--d: 2; --gc: 1/8; --gr: 1"
+                data-bind="closing.titleA"
+              ></span
+              ><span
+                class="tb t2"
+                data-in
+                style="--d: 3; --gc: 1/8; --gr: 2"
+                data-bind="closing.titleB"
+              ></span>
+            </h2>
+            <p
+              class="s4d"
+              data-in
+              style="--d: 3; --gc: 1/7; --gr: 3"
+              data-bind="closing.description"
+            ></p>
+            <div class="hg" data-in style="--d: 4; --gc: 1/4; --gr: 4">
+              <h3>Harapan</h3>
+              <ul id="hopes"></ul>
+            </div>
+            <div class="hg" data-in style="--d: 5; --gc: 4/8; --gr: 4">
+              <h3>Cita-cita</h3>
+              <ul id="goals"></ul>
+            </div>
+            <p
+              class="quote t1"
+              data-in
+              style="--d: 6; --gc: 1/-1; --gr: 5"
+              data-bind="closing.quote"
+            ></p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script>
+      /* =====================================================================
+   PERSONAL_DATA — SEMUA teks, foto, dan link website ada di file ini.
+   Ini satu-satunya bagian yang perlu Anda ubah (CONFIG).
+
+   CARA GANTI FOTO
+   1) Simpan foto ke folder  assets/
+   2) Samakan nama file di bawah (atau ubah path-nya).
+        photos.profile   -> foto di scene "About Me"      (PNG transparan, tanpa bingkai)
+        photos.closing   -> foto di scene "Closing"          (PNG transparan, tanpa bingkai)
+        photos.social    -> foto di scene "Social Media"     (PNG transparan, tanpa bingkai)
+        social.*.avatar / posts / stats / repos -> data lama, disimpan (halaman preview sudah dihapus)
+   Foto yang belum ada otomatis diganti placeholder hijau.
+
+   CARA GANTI TEKS
+   Ubah isi tanda kutip "..." saja. Jangan hapus koma / kurung.
+   ===================================================================== */
+      const PERSONAL_DATA = {
+        title: "PORTOFOLIO MASDUL", // kata terakhir tampil paling besar
+        eyebrow: "Perkenalan Diri",
+        fullName: "Abdul Aziz Muammar Ridwan",
+        nickname: "Masdul",
+        tagline: "Belajar tanpa henti, berkarya dengan sepenuh hati.",
+        birth: "Bandung, 5 November 2007",
+        education: "SMK Angkasa 1 Margahayu",
+        interests: ["Teknologi", "Desain", "Fotografi", "Musik"],
+        talents: ["Coding", "Public Speaking", "Menggambar"],
+
+        photos: {
+          // PNG transparan (tidak di-crop)
+          profile: "assets/profile.png", // <- FOTO PROFIL (scene About Me)
+          closing: "assets/closing.png", // <- FOTO PENUTUP (scene Closing)
+          social: "assets/social.png", // <- FOTO SOCIAL MEDIA (PNG transparan). Jika file belum ada, otomatis memakai photos.closing
+        },
+
+        social: {
+          instagram: {
+            label: "Instagram",
+            cta: "Visit Instagram",
+            url: "https://www.instagram.com/ajzszsz?dlrf=MTl0czU3aG4yNDdlYQ==",
+            username: "@ajzszsz",
+            displayName: "Dull",
+            avatar: "assets/instagram.jpg", // <- FOTO PROFIL INSTAGRAM (persegi)
+            bio: "Menulis, memotret, dan belajar. Desain & teknologi.",
+            stats: { posts: 24, followers: 1280, following: 310 },
+            posts: [], // isi path gambar, mis. ["assets/ig1.jpg", ...] (maks 9)
+          },
+          tiktok: {
+            label: "TikTok",
+            cta: "Open TikTok",
+            url: "https://www.tiktok.com/@masdul058?is_from_webapp=1&sender_device=pc",
+            username: "@masdul058",
+            displayName: "Masduul",
+            avatar: "assets/tiktok.jpg", // <- FOTO PROFIL TIKTOK (persegi)
+            bio: "VOlleyball Legends Player.",
+            stats: { following: 49, followers: 6022, likes: 602700 },
+            posts: [], // isi path thumbnail video (maks 9)
+          },
+          github: {
+            label: "GitHub",
+            cta: "Visit GitHub",
+            url: "https://github.com/Masduul",
+            username: "masdul",
+            displayName: "Masdul",
+            avatar: "assets/github.jpg", // <- FOTO PROFIL GITHUB (persegi)
+            bio: "Web developer pemula. Suka membangun hal kecil yang berguna.",
+            followers: 42,
+            following: 30,
+            location: "Banjar, Indonesia",
+            repos: [
+              {
+                name: "portofolio-masdul",
+                desc: "Website portofolio 3D interaktif.",
+                lang: "JavaScript",
+                color: "#A3AD8C",
+                stars: 12,
+              },
+              {
+                name: "todo-app",
+                desc: "Aplikasi daftar tugas sederhana.",
+                lang: "HTML",
+                color: "#8B6F55",
+                stars: 5,
+              },
+              {
+                name: "belajar-css",
+                desc: "Eksperimen animasi dan 3D CSS.",
+                lang: "CSS",
+                color: "#697653",
+                stars: 8,
+              },
+              {
+                name: "api-latihan",
+                desc: "Latihan membuat REST API.",
+                lang: "Node.js",
+                color: "#493C32",
+                stars: 3,
+              },
+            ],
+          },
+        },
+
+        closing: {
+          titleA: "HARAPAN",
+          titleB: "& CITA-CITA",
+          description:
+            "Saya bermimpi tumbuh menjadi pribadi yang bermanfaat: terus belajar, berkarya, dan membawa kebaikan bagi keluarga serta lingkungan sekitar.",
+          hopes: [
+            "Sehat dan bahagia",
+            "Membanggakan orang tua",
+            "Selalu rendah hati",
+          ],
+          goals: [
+            "Menjadi developer profesional",
+            "Membangun usaha sendiri",
+            "Berbagi ilmu",
+          ],
+          quote: "Mimpi besar dimulai dari langkah kecil hari ini.",
+        },
+      };
+    </script>
+    <script>
+      (() => {
+        const D = PERSONAL_DATA,
+          S = D.social;
+        const $ = (s, r = document) => r.querySelector(s),
+          $$ = (s, r = document) => [...r.querySelectorAll(s)];
+        const get = (o, p) =>
+          p.split(".").reduce((a, k) => (a == null ? a : a[k]), o);
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+        /* ---------- Placeholder bila gambar belum ada ---------- */
+        const ph = (t) =>
+          "data:image/svg+xml;utf8," +
+          encodeURIComponent(
+            `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 90 160"><defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#A3AD8C"/><stop offset="1" stop-color="#697653"/></linearGradient></defs><rect width="90" height="160" fill="url(#g)"/><text x="45" y="92" font-family="Arial Black,sans-serif" font-size="34" fill="#F5F3EB" text-anchor="middle">${t}</text></svg>`,
+          );
+        const phCut =
+          "data:image/svg+xml;utf8," +
+          encodeURIComponent(
+            '<svg xmlns="http://www.w3.org/2000/svg" width="360" height="640" viewBox="0 0 90 160"><circle cx="45" cy="52" r="22" fill="#A3AD8C"/><path d="M2 160C2 116 22 96 45 96s43 20 43 64Z" fill="#697653"/></svg>',
+          );
+        const fallback = (i) => {
+          if (i.dataset.alt && !i.dataset.ta) {
+            i.dataset.ta = 1; // coba gambar cadangan dulu (mis. photos.closing)
+            i.src = get(D, i.dataset.alt);
+            return;
+          }
+          if (!i.dataset.fb) {
+            i.dataset.fb = 1;
+            i.src = i.classList.contains("cut")
+              ? phCut
+              : ph((i.alt || "M")[0].toUpperCase());
+          }
+        };
+        document.addEventListener(
+          "error",
+          (e) => {
+            if (e.target.tagName === "IMG") fallback(e.target);
+          },
+          true,
+        );
+
+        /* ---------- Isi konten dari PERSONAL_DATA ---------- */
+        document.title = D.title;
+        const words = D.title.trim().split(/\s+/);
+        D._a = words.slice(0, -1).join(" ") || D.title;
+        D._b = words.length > 1 ? words.pop() : "";
+        $$("[data-bind]").forEach(
+          (el) => (el.textContent = get(D, el.dataset.bind) ?? ""),
+        );
+        $$("[data-img]").forEach((el) => {
+          el.src = get(D, el.dataset.img);
+        });
+        const list = (id, arr, tag = "li") => {
+          $("#" + id).innerHTML = arr
+            .map((x) => `<${tag}>${x}</${tag}>`)
+            .join("");
+        };
+        list("interests", D.interests);
+        list("talents", D.talents);
+        list("hopes", D.closing.hopes);
+        list("goals", D.closing.goals);
+
+        /* Blok Social Media: Instagram -> TikTok -> GitHub, memakai data asli dari PERSONAL_DATA.social */
+        ["instagram", "tiktok", "github"].forEach((k) => {
+          const s = S[k];
+          $("#soc-" + k).innerHTML =
+            `<h3 class="pn"><span>${s.label}</span></h3>` +
+            `<p class="pu"><b>${s.username}</b><span class="dn">${s.displayName}</span></p>` +
+            `<p class="pb">${s.bio}</p>` +
+            `<a class="btn" href="${s.url}" target="_blank" rel="noopener noreferrer" aria-label="${s.cta} (${s.label})">VISIT</a>`;
+        });
+
+        $$("img").forEach((i) => {
+          if (i.complete && !i.naturalWidth) fallback(i);
+        }); // gambar yang gagal dimuat sebelum listener aktif
+        /* ==========================================================
+     ENGINE 2D — lingkungan bersama + satu state transisi
+     ========================================================== */
+        const deck = $("#deck"),
+          slides = $$(".slide"),
+          N = slides.length,
+          env = $("#env"),
+          root = document.documentElement.style;
+        const state = {
+          currentScene: 0,
+          targetScene: 0,
+          transitionState: "idle",
+          isTransitioning: false,
+          cameraState: { c: 0 },
+        };
+        const cam = state.cameraState,
+          mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+        const fine = matchMedia("(hover:hover) and (pointer:fine)").matches,
+          small = innerWidth < 700;
+        const ease = (x) =>
+          x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2;
+        const wait = (ms) => new Promise((r) => setTimeout(r, reduce ? 0 : ms));
+        const setT = (v) => {
+          state.transitionState = v;
+          deck.dataset.t = v;
+        };
+        let raf = 0,
+          anim = null;
+        let pzT = 0;
+        const kc = { pz: 0 };
+
+        /* ---------- Environment Manager: dibuat SEKALI, bergeser dengan parallax ---------- */
+        (function buildEnv() {
+          let sd = 11;
+          const R = () => (sd = (sd * 16807) % 2147483647) / 2147483647,
+            m = (a, b) => a + (b - a) * R();
+          const lite = !fine || small;
+          const lay = (f, items) =>
+            `<div class="lay" style="--f:${f}">${items}</div>`;
+          const it = (c, f, x, y, v, st = "") =>
+            `<i class="${c}" style="--x:${x.toFixed(1)};--y:${y.toFixed(1)};--v:${v};${st}"></i>`;
+          const W = (f) => 100 * (1 + 3 * f);
+          let far = "",
+            mid = "",
+            near = "",
+            fg = "";
+          [
+            [0.08, 0],
+            [0.08, 1],
+          ].forEach(
+            ([f], k) =>
+              (far += it(
+                "nb",
+                f,
+                k ? W(f) * 0.6 : 8,
+                k ? 55 : 10,
+                k ? 70 : 80,
+              )),
+          );
+          for (let i = 0; i < (lite ? 30 : 60); i++)
+            far += it(
+              "st",
+              0.08,
+              m(2, W(0.08) - 3),
+              m(3, 94),
+              1,
+              `--s:${m(2, 4).toFixed(1)}px;--t:${m(3, 8).toFixed(1)}s`,
+            );
+          [
+            [0.2, 14, 22, 34, "#CBD3B6", "#7F8C66", 0],
+            [0.2, 38, 64, 20, "#C2A688", "#8B6F55", 1],
+            [0.2, 62, 16, 26, "#B7C09F", "#4c573a", 0],
+            [0.2, 82, 60, 30, "#CBD3B6", "#697653", 1],
+            [0.2, 100, 18, 12, "#C2A688", "#6b5340", 0],
+          ].forEach(
+            ([f, x, y, v, a, b, rg]) =>
+              (mid += it(
+                "pl" + (rg ? " rg" : ""),
+                f,
+                x,
+                y,
+                v,
+                `--c1:${a};--c2:${b}`,
+              )),
+          );
+          [
+            [20, 26, 60],
+            [66, 20, 54],
+          ].forEach(([x, y, v]) => (mid += it("or", 0.2, x, y, v)));
+          [
+            [0.45, 10, 8, 0],
+            [0.45, 70, 14, 6],
+            [0.45, 130, 10, 11],
+          ].forEach(
+            ([f, x, y, d], i) =>
+              (near += it("cm", f, x, y, 0, `--t:${15 + i * 3}s;--dl:${d}s`)),
+          );
+          for (let i = 0; i < (lite ? 14 : 30); i++)
+            near += it(
+              "pt",
+              0.45,
+              m(2, W(0.45) - 3),
+              m(4, 92),
+              0,
+              `--s:${m(3, 7).toFixed(1)}px;--t:${m(6, 12).toFixed(1)}s;--dx:${m(-24, 24) | 0}px`,
+            );
+          [
+            [0.8, 20, 82, 3.4, "og"],
+            [0.8, 90, 12, 2.2, "dk"],
+            [0.8, 170, 78, 3, "og"],
+            [0.8, 250, 20, 2.4, "dk"],
+          ].forEach(([f, x, y, v, c]) => (fg += it(c, f, x, y, v)));
+          env.innerHTML =
+            lay(0.08, far) + lay(0.2, mid) + lay(0.45, near) + lay(0.8, fg);
+        })();
+
+        function render() {
+          renderScene();
+        }
+        /* ---------- Spring foto: overshoot kecil lalu settle tepat di titik semula ----------
+           Respons impuls teredam: v(t)=e^(-4.4t)·sin(7.6t)/0.472 -> puncak 1 (overshoot), lalu -0.16 (kembali), lalu 0 tepat.
+           Dimulai di 90% perjalanan kamera agar kecepatannya menyambung dengan perlambatan kamera.
+           Hanya foto yang bergerak (lewat --bx/--by/--bs/--br) — kamera, background, dan parallax tidak ikut bergetar. */
+        const SPR = { el: null, mode: 0, t0: 0, f0: 0, sx: 1, o: { x: 0, y: 0, s: 0, r: 0 }, from: null };
+        const sprV = (t) => (Math.exp(-4.4 * t) * Math.sin(7.6 * t)) / 0.472;
+        function endSpring() {
+          if (SPR.el) {
+            ["--bx", "--by", "--bs", "--br"].forEach((n) => SPR.el.style.removeProperty(n));
+          }
+          SPR.el = null;
+          SPR.mode = 0;
+        }
+        function startSpring(i, sx, now) {
+          if (reduce) return;
+          const pic = slides[i].querySelector(".pic");
+          if (!pic) return;
+          if (SPR.el) endSpring();
+          Object.assign(SPR, { el: pic, mode: 1, t0: now, sx, o: { x: 0, y: 0, s: 0, r: 0 } });
+        }
+        function stopSpring() {
+          // meninggalkan slide: offset dikembalikan halus ke 0 (tanpa terpental)
+          if (!SPR.el || SPR.mode !== 1) return;
+          SPR.mode = 2;
+          SPR.f0 = performance.now();
+          SPR.from = { ...SPR.o };
+          kick();
+        }
+        function stepSpring(now) {
+          let x, y, s, r;
+          if (SPR.mode === 1) {
+            const t = Math.max(0, (now - SPR.t0) / 1000);
+            if (t > 1.8) { endSpring(); return false; }
+            const am = (small ? 0.55 : 1) * sprV(t);
+            x = 15 * SPR.sx * am; y = 4 * am; s = 0.012 * am; r = 0.55 * SPR.sx * am;
+            SPR.o = { x, y, s, r };
+          } else {
+            const k = clamp((now - SPR.f0) / 220, 0, 1);
+            if (k >= 1) { endSpring(); return false; }
+            const m = 1 - k * k * (3 - 2 * k), f = SPR.from;
+            x = f.x * m; y = f.y * m; s = f.s * m; r = f.r * m;
+          }
+          const st = SPR.el.style;
+          st.setProperty("--bx", x.toFixed(2) + "px");
+          st.setProperty("--by", y.toFixed(2) + "px");
+          st.setProperty("--bs", (1 + s).toFixed(4));
+          st.setProperty("--br", r.toFixed(3) + "deg");
+          return true;
+        }
+        function tick(now) {
+          raf = 0;
+          let busy = false;
+          if (anim) {
+            const k = clamp((now - anim.t0) / anim.dur, 0, 1),
+              e = easeNav(k),
+              sn = Math.sin(Math.PI * e),
+              a = anim.a,
+              b = anim.b;
+            cam.c = anim.from + (anim.to - anim.from) * e;
+            camPose = {
+              x: lerp(a.x, b.x, e),
+              y: lerp(a.y, b.y, e),
+              z: lerp(a.z, b.z, e) + anim.bump * sn, // mundur sebentar lalu maju
+              yaw: lerp(a.yaw, b.yaw, e),
+              roll: a.roll * (1 - e) + anim.roll * sn,
+              tilt: a.tilt * (1 - e) + anim.tilt * sn,
+              m: Math.max(clamp(sn * 2.2, 0, 1), a.m * (1 - e)), // "intensitas gerak": 0 saat diam
+            };
+            if (!anim.sp && k >= 0.9) {
+              anim.sp = true;
+              startSpring(anim.to, anim.sx, now);
+            }
+            if (!anim.fired && k >= anim.at) {
+              anim.fired = true;
+              anim.res(true);
+            }
+            if (k >= 1) {
+              cam.c = anim.to;
+              camPose = restPose(anim.to);
+              anim = null;
+            } else busy = true;
+          }
+          if (SPR.el && stepSpring(now)) busy = true;
+          const dz = pzT - kc.pz; // tarikan mundur kamera (pull-back) mengendur halus
+          kc.pz += dz * 0.07;
+          if (Math.abs(dz) > 0.4) busy = true;
+          else kc.pz = pzT;
+          mouse.x += (mouse.tx - mouse.x) * 0.07;
+          mouse.y += (mouse.ty - mouse.y) * 0.07;
+          if (
+            Math.abs(mouse.tx - mouse.x) > 0.0004 ||
+            Math.abs(mouse.ty - mouse.y) > 0.0004
+          )
+            busy = true;
+          render();
+          if (busy) kick();
+        }
+        const kick = () => {
+          if (!raf) raf = requestAnimationFrame(tick);
+        };
+        const flyTo = (i) =>
+          new Promise((res) => {
+            // resolve di 72% perjalanan agar reveal menyambung mulus; target lama dibatalkan halus
+            if (anim && !anim.fired) anim.res(false);
+            if (reduce) {
+              cam.c = i;
+              camPose = restPose(i);
+              anim = null;
+              render();
+              return res(true);
+            }
+            const a = { ...camPose },
+              b = restPose(i),
+              dx = b.x - a.x,
+              dy = b.y - a.y,
+              dist = Math.abs(i - cam.c),
+              k = small ? 0.6 : 1;
+            anim = {
+              a,
+              b,
+              from: cam.c,
+              to: i,
+              t0: performance.now(),
+              dur: clamp(900 + 190 * dist, 800, 1700),
+              at: 0.72,
+              bump: SP.B * clamp(dist / 1.2, 0.35, 1.1),
+              roll: (dx ? -Math.sign(dx) * Math.min(1, Math.abs(dx) / (2 * SP.A)) * 2.4 : -Math.sign(dy || 1) * 1.2) * k,
+              tilt: 1.2 * k * Math.min(1, dist),
+              sx: Math.sign(a.x - b.x) || 1, // arah overshoot = searah gerak foto di layar
+              res,
+            };
+            kick();
+          });
+
+        /* ---------- Scene Manager (SATU jalur untuk menu, panah, keyboard, swipe) ---------- */
+        const ind = $("#ind"),
+          navBtns = $$("#oval [data-go]");
+        /* Titik asal Reveal/Conceal = pusat foto (dihitung ulang tiap reveal agar sesuai ukuran layar) */
+        function aim(slide) {
+          const wt = world.style.transform, st0 = slide.style.transform;
+          world.style.transform = "none";
+          slide.style.transform = "none";
+          try { aimInner(slide); } finally { world.style.transform = wt; slide.style.transform = st0; }
+        }
+        function aimInner(slide) {
+          const img = $(".cut", slide);
+          if (!img) return;
+          const pic = img.closest(".pic"),
+            els = $$("[data-in]", slide).filter((e) => e !== pic),
+            all = [pic, ...els];
+          all.forEach((e) => {
+            e.style.transition = "none";
+            e.style.translate = "0 0";
+            e.style.scale = "1";
+            e.style.rotate = "0deg";
+          });
+          const pr = img.getBoundingClientRect(),
+            cx = pr.left + pr.width / 2,
+            cy = pr.top + pr.height / 2;
+          els.forEach((e) => {
+            const r = e.getBoundingClientRect();
+            e.style.setProperty(
+              "--fx",
+              (cx - r.left - r.width / 2).toFixed(1) + "px",
+            );
+            e.style.setProperty(
+              "--fy",
+              (cy - r.top - r.height / 2).toFixed(1) + "px",
+            );
+          });
+          void slide.offsetWidth;
+          all.forEach((e) => {
+            e.style.removeProperty("translate");
+            e.style.removeProperty("scale");
+            e.style.removeProperty("rotate");
+          });
+          void slide.offsetWidth;
+          all.forEach((e) => e.style.removeProperty("transition"));
+        }
+        function syncNav() {
+          navBtns.forEach((b, i) => {
+            b.classList.toggle("on", i === state.targetScene);
+            b.toggleAttribute("aria-current", i === state.targetScene);
+          });
+          const b = navBtns[state.targetScene];
+          ind.style.translate = b.offsetLeft + "px 0";
+          ind.style.width = b.offsetWidth + "px";
+        }
+        let navTok = 0,
+          concealUntil = 0;
+        async function goTo(i) {
+          i = clamp(i, 0, N - 1);
+          if (i === state.targetScene) return; // sudah di/menuju target ini
+          const tok = ++navTok, // target terbaru selalu menang; proses lama berhenti sendiri
+            OX = small ? 0 : 28,
+            dir = i >= cam.c ? 1 : -1;
+          state.targetScene = i;
+          state.isTransitioning = true;
+          syncNav();
+          try {
+            stopSpring();
+            // 1) Conceal HANYA slide yang sedang tampil (slide yang dilewati tidak punya konten yang aktif)
+            let any = false, hold = 420;
+            slides.forEach((el) => {
+              if (el.classList.contains("in")) {
+                el.style.setProperty("--ox", -dir * OX + "px");
+                el.classList.remove("in");
+                if (el.id === "s3") hold = 560; // GitHub -> TikTok -> Instagram selesai tersedot sebelum kamera jauh
+                any = true;
+              }
+            });
+            if (any) {
+              concealUntil = performance.now() + hold;
+              setT("concealing");
+              setPre(1);
+            }
+            const lag = concealUntil - performance.now();
+            if (lag > 0) await wait(lag);
+            if (tok !== navTok) return;
+            slides.forEach((el) => el.classList.remove("on"));
+            // 2) Satu perjalanan kamera langsung ke target
+            setT("moving");
+            setPre(0);
+            if (!(await flyTo(i)) || tok !== navTok) return;
+            // 3) Tiba: aktifkan & reveal hanya slide tujuan
+            const to = slides[i];
+            state.currentScene = i;
+            to.style.setProperty("--ox", dir * OX + "px");
+            to.classList.add("on");
+            aim(to);
+            await wait(40);
+            if (tok !== navTok) return;
+            setT("revealing");
+            to.classList.add("in");
+            await wait(900);
+          } finally {
+            if (tok === navTok) {
+              state.isTransitioning = false;
+              setT("idle");
+              syncNav();
+              slides.forEach((el, k) => {
+                if (k !== state.targetScene) el.classList.remove("on", "in");
+                else el.classList.add("on", "in");
+              });
+            }
+          }
+        }
+
+        /* ---------- Continuous Animation Manager: tiap elemen punya karakter gerak sendiri ---------- */
+        const FX = [
+          // [selector, ampX px, ampY px, rotasi deg, skala, durasi dasar s]
+          [".cut", 3, 7, 0.45, 0.006, 11],
+          [".sec,.t1,.t2,.nm2,.in2.s4 .ta,.in2.s4 .tb,.quote", 2, 3, 0.22, 0.002, 8],
+          [".words li,.fact,.hg li,.hg h3,.tag,.s4d", 1.5, 3, 0.3, 0, 7],
+          [".btn", 2, 4, 0.3, 0.008, 6.5],
+          [".orn,.pl,.nb,.or,.og,.dk", 5, 9, 2.5, 0.02, 13],
+          [".bgword,.bgamp", 4, 6, 0.6, 0.006, 15],
+        ];
+        let seed = 7;
+        const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
+        function decorate(scope = document) {
+          if (reduce) return;
+          FX.forEach(([sel, ax, ay, ar, as, d]) =>
+            scope.querySelectorAll(sel).forEach((e) => {
+              if (e.classList.contains("fx")) return;
+              const sg = () => (rnd() < 0.5 ? -1 : 1) * (0.6 + rnd() * 0.8);
+              const st = e.style;
+              st.setProperty("--amx", (ax * sg()).toFixed(2) + "px");
+              st.setProperty("--amy", (ay * sg()).toFixed(2) + "px");
+              st.setProperty("--amr", (ar * sg()).toFixed(2) + "deg");
+              st.setProperty("--ams", (as * (0.6 + rnd() * 0.8)).toFixed(4));
+              st.setProperty("--dua", (d * (0.8 + rnd() * 0.4)).toFixed(1) + "s");
+              st.setProperty("--dub", (d * (1.2 + rnd() * 0.5)).toFixed(1) + "s");
+              st.setProperty("--dly", (-rnd() * d).toFixed(1) + "s");
+              e.classList.add("fx");
+            }),
+          );
+        }
+        decorate();
+
+        /* ---------- Scene & Camera Controller 2.5D ----------
+           Slide tersusun di sumbu Z: KIRI → KANAN → KIRI → KANAN. Kamera (satu pose: x, y, z, yaw, roll, tilt)
+           dihitung dari satu nilai progres cam.c, lalu dipakai juga oleh background, DOF, dan parallax. */
+        const world = document.createElement("div");
+        world.className = "world";
+        slides[0].parentNode.insertBefore(world, slides[0]);
+        slides.forEach((e) => world.appendChild(e));
+        const SP = { W: 1, H: 1, A: 0, D: 0, B: 0, X: [], Y: [], Z: [], T: [] };
+        const lerp = (a, b, t) => a + (b - a) * t;
+        let camPose = { x: 0, y: 0, z: 0, yaw: 0, roll: 0, tilt: 0, m: 0 };
+        function layout() {
+          const W = innerWidth, H = innerHeight, D = clamp(W * 0.95, 900, 1500);
+          Object.assign(SP, { W, H, A: W * (small ? 0.24 : 0.3), D, B: D * 0.64 });
+          slides.forEach((el, i) => {
+            const L = i % 2 === 0 ? -1 : 1; // 0 kiri, 1 kanan, 2 kiri, 3 kanan
+            SP.X[i] = L * SP.A;
+            SP.Y[i] = -L * 0.055 * H;
+            SP.Z[i] = -i * D; // makin ke belakang = makin jauh
+            SP.T[i] = -L * 9; // menghadap jalur kamera
+            el.style.transform = `translate3d(${SP.X[i].toFixed(1)}px, ${SP.Y[i].toFixed(1)}px, ${SP.Z[i].toFixed(1)}px) rotateY(${SP.T[i]}deg)`;
+          });
+          if (!anim) camPose = restPose(state.targetScene);
+        }
+        const easeNav = (x) => (x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2);
+        const restPose = (i) => ({ x: SP.X[i], y: SP.Y[i], z: SP.Z[i], yaw: -SP.T[i], roll: 0, tilt: 0, m: 0 });
+        const sc = slides.map(() => ({ o: "", f: "" }));
+        function renderScene() {
+          const P = camPose, q = cam.c;
+          world.style.transform = `rotateZ(${P.roll.toFixed(3)}deg) rotateX(${(P.tilt - mouse.y * 0.7).toFixed(3)}deg) rotateY(${(P.yaw + mouse.x * 1.1).toFixed(3)}deg) translate3d(${(-P.x).toFixed(1)}px, ${(-P.y).toFixed(1)}px, ${(-(P.z + kc.pz)).toFixed(1)}px)`;
+          slides.forEach((el, i) => {
+            // visibilitas dihitung dari jarak KAMERA ke slide: diam = hanya slide aktif yang terlihat (zero leakage)
+            const ahead = (P.z - SP.Z[i]) / SP.D,
+              lat = (P.x - SP.X[i]) / (2 * SP.A),
+              vert = ((P.y - SP.Y[i]) / SP.H) * 3,
+              dist = Math.hypot(ahead, lat, vert),
+              focus = clamp(1 - dist * 0.9, 0, 1),
+              g = ahead > 0.02 ? Math.max(0, 0.6 - 0.2 * (ahead - 1)) : Math.max(0, 1 + ahead * 2.4) * 0.6,
+              o = Math.max(focus, g * P.m),
+              blur = Math.min(dist * 3.2, 4.2) + (dist < 0.5 ? 0.9 * (kc.pz / 150) : 0);
+            const c = sc[i], os = o.toFixed(3), fs = blur > 0.05 ? `blur(${blur.toFixed(2)}px)` : "";
+            if (c.o !== os) { el.style.opacity = os; el.style.visibility = o < 0.01 ? "hidden" : ""; c.o = os; }
+            if (c.f !== fs) { el.style.filter = fs; c.f = fs; }
+          });
+          // background memakai pose kamera yang sama (faktor kedalaman per layer diatur di CSS)
+          const kb = (small ? 1.4 : 2.4) * P.m + 0.8 * (kc.pz / 150);
+          env.style.setProperty("--c", (q * 0.3 + (P.x / SP.W) * 0.9).toFixed(4));
+          env.style.setProperty("--ky", ((-P.y / SP.H) * 80).toFixed(3));
+          env.style.setProperty("--kr", P.roll.toFixed(3));
+          env.style.setProperty("--kz", ((-P.z / SP.D) * 0.04 - (kc.pz / SP.D) * 0.07).toFixed(4));
+          env.style.setProperty("--kb", kb.toFixed(3));
+          env.classList.toggle("dof", kb > 0.05);
+          root.setProperty("--mx", mouse.x.toFixed(3));
+          root.setProperty("--my", mouse.y.toFixed(3));
+        }
+        const setPre = (v) => { pzT = reduce ? 0 : v * 150; kick(); };
+        layout();
+        addEventListener("resize", () => { layout(); renderScene(); });
+        slides[0].classList.add("on");
+        syncNav();
+        render();
+        setTimeout(() => slides[0].classList.add("in"), 250);
+        addEventListener("resize", () => {
+          syncNav();
+          if (!state.isTransitioning) aim(slides[state.currentScene]);
+        });
+
+        /* ---------- Interaction Manager ---------- */
+        let sw = null;
+        deck.addEventListener("pointerdown", (e) => {
+          if (!(e.pointerType === "mouse" && e.button !== 0))
+            sw = { x: e.clientX, y: e.clientY };
+        });
+        deck.addEventListener("pointerup", (e) => {
+          if (!sw) return;
+          const dx = e.clientX - sw.x,
+            dy = e.clientY - sw.y;
+          sw = null;
+          if (Math.abs(dx) < 60 || Math.abs(dx) < Math.abs(dy) * 1.4) return;
+          goTo(state.targetScene + (dx < 0 ? 1 : -1));
+        });
+        deck.addEventListener("pointercancel", () => {
+          sw = null;
+        });
+        deck.addEventListener("pointermove", (e) => {
+          if (!fine) return;
+          mouse.tx = e.clientX / innerWidth - 0.5;
+          mouse.ty = e.clientY / innerHeight - 0.5;
+          kick();
+        });
+        deck.addEventListener("pointerleave", () => {
+          mouse.tx = mouse.ty = 0;
+          kick();
+        });
+        addEventListener("keydown", (e) => {
+          if (e.key === "ArrowRight") goTo(state.targetScene + 1);
+          else if (e.key === "ArrowLeft") goTo(state.targetScene - 1);
+        });
+        document.addEventListener("click", (e) => {
+          const t = e.target.closest("[data-go],#prev,#next");
+          if (!t) return;
+          if (t.dataset.go != null) goTo(+t.dataset.go);
+          else if (t.id === "prev") goTo(state.targetScene - 1);
+          else goTo(state.targetScene + 1);
+        });
+
+      })();
+    </script>
+  </body>
+</html>
